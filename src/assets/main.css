@@ -1,0 +1,14 @@
+@import './base.css';
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+#app{
+  width: 350px;
+  height: 800px;
+  margin: auto;
+  background: #f7f7f7;
+  position: relative;
+}
