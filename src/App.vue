@@ -4,7 +4,7 @@ import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
-<div class="fixedP btn bg-warning w-[60px] h-[60px] border-0 text-[50px] fixed bottom-[30px] right-[590px] z-10 text-white font-normal rounded-[50%]"><span class="mt-[-10px]">+</span></div>
+<div class="fixedP btn bg-warning w-[60px] h-[60px] border-0 text-[50px] fixed bottom-[30px] left-[250px] z-10 text-white font-normal rounded-[50%]"><span class="mt-[-10px]">+</span></div>
   <RouterView />
 </template>
 
