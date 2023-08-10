@@ -3,7 +3,8 @@
 </script>
 
 <template>
-  <header class="bg-[#f7f7f7] flex justify-center items-center relative ">
+ 
+  <header class="bg-[#f7f7f7] fixed top-0 left-0 flex justify-center items-center relative ">
     <div class="files mr-[55px]" @click="file()">
       <svg width="22" height="21" v-if="current == false" class="cursor-pointer" @click="pageHide()" viewBox="0 0 22 21"
         fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -41,7 +42,7 @@
           stroke-linejoin="round" />
       </svg>
     </div>
-    <div class="nastroyka absolute right-5">
+    <div class="nastroyka absolute right-5" @click="setActive()">
       <svg width="21" class="cursor-pointer" height="25" viewBox="0 0 21 25" fill="none"
         xmlns="http://www.w3.org/2000/svg">
         <path
@@ -52,6 +53,7 @@
       </svg>
     </div>
   </header>
+   
   <swiper @real-index-change="af()" :navigation="true" :modules="modules" class="mySwiper">
     <swiper-slide class="sw px-[10px]">
       <div class="top w-[100%] h-[150px] flex flex-col">
@@ -66,7 +68,7 @@
             </svg>
           </div>
         </div>
-        <div class="categories items-center w-[100%] h-[150px] flex justify-start">
+        <div @click="category()" class="categories items-center w-[100%] h-[150px] flex justify-start">
           <div
             class="btn capitalize mr-[10px] bg-[#ffff] text-black font-semibold text-[13px] border-none hover:bg-[#eeeeee]"
             :class="{ 'red': selected == false }" @click="selected = !selected">All</div>
@@ -76,8 +78,9 @@
           <div v-for="i of this.folders" :key="i.id"
             class="folders mx-[5px] btn capitalize bg-[#ffff] text-black font-semibold text-[13px] border-none hover:bg-[#eeeeee] text-gray-400">
             {{ i.title }}</div>
-          <div @click="createFolder()" class="newFolder btn mx-[5px] bg-[#ffff] border-0 shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] hover:bg-[#eeeeee]"><svg width="30" height="22" viewBox="0 0 30 22" fill="none"
-              xmlns="http://www.w3.org/2000/svg">
+          <div @click="createFolder()"
+            class="newFolder btn mx-[5px] bg-[#ffff] border-0 shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] hover:bg-[#eeeeee]">
+            <svg width="30" height="22" viewBox="0 0 30 22" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M2.24428 19.7976L2.38683 1.56587" stroke="#EDD012" stroke-width="3" stroke-linecap="round" />
               <path d="M27.619 2.94519L14.4064 2.94519" stroke="#EDD012" stroke-width="3" stroke-linecap="round" />
               <path d="M27.619 19.7979V2.94519" stroke="#EDD012" stroke-width="3" stroke-linecap="round" />
@@ -89,25 +92,28 @@
           </div>
         </div>
       </div>
-      <div class="notes">
-        <div v-for="i of this.all" :key="i.id"
-          class="block w-[100%] flex flex-col justify-between items-start p-[15px] h-[120px] bg-[#fff] rounded-[15px]">
+      <div class="notes w-[100%] overflow-y-scroll">
+        <div v-for="i of this.allTasks" :key="i.id"
+          class="block w-[100%] my-[10px] flex flex-col justify-between items-start p-[15px] h-[120px] bg-[#fff] rounded-[15px]">
           <div class="title text-black font-semibold">{{ i.title }}</div>
           <div class="text text-[#707070] text-[15px]">{{ i.body }}</div>
           <div class="date text-[#707070] text-[13px]">{{ i.date }}</div>
         </div>
       </div>
       <div class="newFold flex flex-col justify-between items-center" v-if="newFold">
-      <form action="" class=" flex flex-col justify-between items-center" @submit.prevent="createF()">
-        <div class="example m-[5px] btn capitalize bg-[#ffff] text-black font-semibold text-[13px] border-none hover:bg-[#eeeeee] text-gray-400"></div>
-        <label class="text-left text-gray-400">Create a new folder
-          <input type="text" placeholder="Enter the name of folder" v-model="nameFolder" @input="typeF()" class="input input-bordered input-info w-full max-w-xs my-[15px]" />
-        </label>
-        <input type="submit" class="btn btn-info " value="Create">
-      </form>
+        <form action="" class=" flex flex-col justify-between items-center" @submit.prevent="createF()">
+          <div
+            class="example m-[5px] btn capitalize bg-[#ffff] text-black font-semibold text-[13px] border-none hover:bg-[#eeeeee] text-gray-400">
+          </div>
+          <label class="text-left text-gray-400">Create a new folder
+            <input type="text" required placeholder="Enter the name of folder" v-model="nameFolder" @input="typeF()"
+              class="input input-bordered input-info w-full max-w-xs my-[15px]" />
+          </label>
+          <input type="submit" class="btn btn-info " value="Create">
+        </form>
       </div>
     </swiper-slide>
-    <swiper-slide class="sw px-[10px]">
+    <swiper-slide class="sw px-[10px] h-[100%]">
       <div class="uncompleted my-[10px]" v-for="i of this.all" :key="i.id">
         <div class="task rounded-[10px] bg-white py-[10px] w-[100%] flex flex-row justify-start items-center">
           <div class="check w-[50px] flex flex-row justify-center items-center">
@@ -176,22 +182,116 @@
         </div>
       </div>
     </swiper-slide>
+    <div class="newTask flex flex-col justify-between items-center" v-if="createNote">
+      <form action="" class=" flex flex-col justify-between items-center">
+        <div
+          class="w-[100%] my-[10px] flex flex-col justify-between items-start p-[15px] h-[120px] bg-[#fff] rounded-[15px]">
+          <div id="title" class="title text-black font-semibold"></div>
+          <div id="text" class="text text-[#707070] text-[15px]"></div>
+          <div id="date" class="date text-[#707070] text-[13px]"></div>
+        </div>
+        <label class="text-left text-gray-400">Create a new note
+          <input type="text" required placeholder="Enter the name of note" v-model="taskName" @input="taskNamee()"
+            class="input input-bordered input-info w-full bg-white max-w-xs my-[15px]" />
+          <input type="text" required placeholder="Enter the description of note" v-model="taskMsg" @input="taskMsge()"
+            class="input input-bordered input-info w-full bg-white max-w-xs my-[15px]" />
+          <input type="datetime-local" required placeholder="Enter the date of note" v-model="taskDate" @input="taskDatee()"
+            class="input input-bordered input-info w-full bg-white w-[100%] my-[15px]" />
+        </label>
+        <input type="submit" class="btn btn-info text-white" value="Create">
+      </form>
+    </div>
+    <div @click="newNote()"
+      class="fixedP btn bg-warning w-[50px] h-[50px] border-0 text-[50px] fixed bottom-[60px] left-[270px] z-10 text-white font-normal rounded-[50%]">
+      <span class="mt-[-10px]">+</span></div>
   </swiper>
-  
+  <div :class="{'setAct' : setAct}" class="settings p-0 mb-0 m-0 flex flex-col mb-[100px] justify-flex start items-start absolute px-[20px] bg-white shadow-none w-[100%]">
+    <div @click="closeSet()" class="btn bg-white text-5xl border-0 text-black m-0 w-0 hover:bg-white focus:outline-0">&larr;</div>
+      <span class="text-[30px] text-thin text-black mt-[40px] mb-[30px]">Notes</span>
+      <div class="cloudService mb-[25px]">
+        <span class="uppercase text-gray-400 text-[15px]">cloud Service</span>
+        <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
+          <span class="w-[120px] text-black font-bold">Xiaomi Cloud</span>
+          <span class="flex flex-row justify-center items-center text-warning text-[14px]">Turn on the sync with the cloud
+            <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon" version="1.1"
+              xmlns="http://www.w3.org/2000/svg">
+              <path d="M256 120.768L306.432 64 768 512l-461.568 448L256 903.232 659.072 512z" fill="#000000" />
+            </svg></span>
+        </div>
+        <div class="block1 border-b-[1px] w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
+          <span class="text-black font-bold">Deleted notes in the cloud</span>
+          <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon" version="1.1"
+            xmlns="http://www.w3.org/2000/svg">
+            <path d="M256 120.768L306.432 64 768 512l-461.568 448L256 903.232 659.072 512z" fill="#000000" />
+          </svg>
+        </div>
+      </div>
+      <div class="style w-[100%] mb-[25px]">
+        <span class="uppercase text-gray-400 text-[15px]">STYLE</span>
+        <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
+          <span class="w-[120px] text-black font-bold">Font size</span>
+          <span class="flex flex-row justify-center items-center bg-white text-[14px]">
+            <select class="select bg-white border-0 shadow-none text-black focus:outline-0">
+              <option selected>Medium</option>
+              <option>Small</option>
+              <option>Large</option>
+            </select>
+          </span>
+        </div>
+        <div class="block1 border-b-[1px] w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
+          <span class="w-[120px] text-black font-bold">Sort</span>
+          <span class="flex flex-row justify-center items-center bg-white text-[14px]">
+            <select class="select bg-white border-0 shadow-none text-black focus:outline-0">
+              <option selected>By modification date</option>
+              <option></option>
+            </select>
+          </span>
+        </div>
+
+      </div>
+      <div class="quick w-[100%] mb-[25px]">
+        <span class="uppercase text-gray-400 text-[15px]">Quick features</span>
+        <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center border-b-[1px]">
+          <span class="w-[120px] text-black font-bold">Quick notes</span>
+          <span class="flex flex-row justify-center items-center bg-white text-[14px]">
+            <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon" version="1.1"
+              xmlns="http://www.w3.org/2000/svg">
+              <path d="M256 120.768L306.432 64 768 512l-461.568 448L256 903.232 659.072 512z" fill="#000000" />
+            </svg>
+          </span>
+        </div>
+
+      </div>
+      <div class="w-[100%]">
+        <span class="uppercase text-gray-400 text-[15px]">Reminders</span>
+        <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
+          <div class="left p-0">
+            <span class="w-[120px] text-black font-bold ">High-priority reminders</span>
+            <span class="flex flex-row justify-center items-center bg-white text-[14px]">
+              Play sound even when Silent or DND mode is on
+            </span>
+          </div>
+          <input type="checkbox" class="toggle" checked />
+        </div>
+      </div>
+    </div>
 </template>
 
 <script>
+import Fixed from '../components/Fixed.vue'
 import store from '../store/index'
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide, useSwiper, useSwiperSlide } from 'swiper/vue';
 // Import Swiper styles
 import 'swiper/css';
+import { onMounted } from 'vue';
 
 export default {
   name: 'HomeView',
   components: {
     Swiper,
     SwiperSlide,
+    Fixed
   },
   data() {
     return {
@@ -199,9 +299,19 @@ export default {
       folders: store.state.folders,
       completed: store.state.completed,
       nameFolder: '',
+      realFolderId: '',
+      setAct: false,
       current: true,
       selected: false,
+      dateOfNote: '',
+      createNote: false,
+      taskDate: '',
+      taskMsg: '',
+      taskTime: '',
+      taskName: '',
       newFold: false,
+      allTasks: [],
+      presentArr: [],
     };
   },
   methods: {
@@ -228,41 +338,116 @@ export default {
         this.current = false
       }
     },
-    createFolder(){
+    setActive(){
+      this.setAct = !this.setAct
+    },
+    closeSet(){
+      this.setAct = !this.setAct
+    },
+    createFolder() {
       this.newFold = !this.newFold
     },
-    createF(){
+    createF() {
       let newF = {
-                id: this.folders.length + 2,
-                title: this.nameFolder,
-                todos: [],
+        id: this.folders.length + 2,
+        title: this.nameFolder,
+        todos: [],
       }
-      store.dispatch('ADD_NEW_FOLDER' , newF)
+      store.dispatch('ADD_NEW_FOLDER', newF)
       this.newFold = !this.newFold
     },
-    typeF(){
+    typeF() {
       let ex = document.querySelector('.example')
-       ex.innerHTML = this.nameFolder
+      ex.innerHTML = this.nameFolder
     },
     done(task) {
       store.dispatch('DONE_MUTATION', task)
       console.log(this.completed);
     },
-    mounted() {
-      console.log(this.all);
-    }
-  }
+    category() {
+      let wrapper = document.querySelector('.categories')
+      for (let i of wrapper.childNodes) {
+        i.onclick = (e) => {
+          for (let o of this.folders) {
+            if (e.target.innerHTML == o.title) {
+              this.allTasks = this.all.filter(item => item.folder == o.id)
+              this.realFolderId = o.id
+            }
+            else if (e.target.innerHTML == 'All') {
+              this.allTasks = this.all
+              this.realFolderId = 0
+            }
+          }
+        }
+      }
+    },
+    newNote() {
+      this.createNote = !this.createNote
+    },
+    taskNamee() {
+      let title = document.querySelector('#title')
+      title.innerHTML = this.taskName
+    },
+    taskMsge() {
+      let text = document.querySelector('#text')
+      text.innerHTML = this.taskMsg
+    },
+    taskDatee() {
+      let datee = document.querySelector('#date')
+        let date = new Date(this.taskDate)
+        if(new Date().getFullYear() == date.getFullYear() && new Date().getMonth() == date.getMonth() && new Date().getDay() == date.getDay()){
+          if(date.getMinutes().toString().split('').length == 1){
+            let hour = date.getHours()
+            let minute = date.getMinutes()
+            datee.innerHTML = `Today ${hour}:0${minute}`
+          }else{
+            let hour = date.getHours()
+            let minute = date.getMinutes()
+            datee.innerHTML = `Today ${hour}:${minute}`
+          }
+      }
+    },
+    // taskTimee() {
+      // let time = document.querySelector('#date')
+      // time.innerHTML = this.taskTime
+    // },
+
+  },
+  created() {
+    this.allTasks = this.all
+  },
+
 };
 </script>
 
-<style scoped>header {
+<style scoped>
+.fixedP:hover {
+  background: #fbbe23c6;
+}
+.notes{
+  overflow: scroll;
+}
+.settings{
+  position: absolute;
+  left: -100%;
+  top: 0;
+  transition: .3s;
+  width: 100%;
+  height: 110vh;
+  z-index: 9999;
+}
+.setAct{
+  left: 0 !important;
+}
+header {
   width: 100%;
   height: 80px;
 
 }
-.newFold{
+
+.newFold {
   width: 100%;
-  height: 80%;
+  height: 90%;
   position: absolute;
   bottom: 0;
   z-index: 124124;
@@ -270,6 +455,18 @@ export default {
   left: 0;
   background: rgb(231, 231, 231);
 }
+
+.newTask {
+  width: 100%;
+  height: 90%;
+  position: absolute;
+  bottom: 0;
+  z-index: 124124;
+  padding: 30px;
+  left: 0;
+  background: rgb(231, 231, 231);
+}
+
 .swiper {
   position: relative;
   width: 100%;
@@ -279,6 +476,7 @@ export default {
 
 .swiper-wrapper {
   width: 100%;
+  position: relative;
 }
 
 .red {

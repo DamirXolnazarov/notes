@@ -7,13 +7,15 @@
 }
 #app{
   width: 350px;
-  height: 100vh;
-  margin: auto;
+  height: 800px;
   background: #f7f7f7;
   position: relative;
 }
 body{
   width: 350px;
-  margin: auto;
+  height: 800px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
   background: #f7f7f7;
 }

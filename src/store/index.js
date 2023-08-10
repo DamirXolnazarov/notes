@@ -37,6 +37,27 @@ export default createStore({
                 date: 'Tomoroow 15:00',
                 body: 'Run off-road'
             },
+            {
+                title: 'Run',
+                id: 124124124,
+                folder: 4,
+                date: 'Tomoroow 15:00',
+                body: 'Run off-road'
+            },
+            {
+                title: 'Run',
+                id: 124124124,
+                folder: 4,
+                date: 'Tomoroow 15:00',
+                body: 'Run off-road'
+            },
+            {
+                title: 'Run',
+                id: 124124124,
+                folder: 4,
+                date: 'Tomoroow 15:00',
+                body: 'Run off-road'
+            },
         ],
         folders: [
             {
@@ -101,7 +122,7 @@ export default createStore({
 
 
         ],
-        completed:[
+        completed: [
 
         ]
     },
@@ -111,31 +132,23 @@ export default createStore({
         completed: (state) => state.completed
     },
 
-      mutations: {
-      DONE_MUTATION(state, task) {
-      state.completed.push(task)
-      state.all.splice(state.all.indexOf(task) , 1)
+    mutations: {
+        DONE_MUTATION(state, task) {
+            state.completed.push(task)
+            state.all.splice(state.all.indexOf(task), 1)
+        },
+        ADD_NEW_FOLDER(state, folder) {
+            state.folders.push(folder)
+        },
     },
-    ADD_NEW_FOLDER(state, folder) {
-      state.folders.push(folder)
-    },
-},
-    // REMOVE_FAVOURITE_MUTATION(state, item) {
-    //   for(let i of state.favouties){
-    // if(i.idx == item.idx){
-    //   state.favouties.splice( state.favouties.indexOf(i) , 1)
-    // }
-    //   }
-    // },
-    //   },
-      actions: {
-    DONE_MUTATION({ commit }, task) {
-      commit("DONE_MUTATION", task)
-    },
-    ADD_NEW_FOLDER({ commit }, folder) {
-      commit("ADD_NEW_FOLDER", folder)
-    },
-}
+    actions: {
+        DONE_MUTATION({ commit }, task) {
+            commit("DONE_MUTATION", task)
+        },
+        ADD_NEW_FOLDER({ commit }, folder) {
+            commit("ADD_NEW_FOLDER", folder)
+        },
+    }
     // REMOVE_FAVOURITE({ commit }, item) {
     //   commit("REMOVE_FAVOURITE_MUTATION", item)
     // },
@@ -143,3 +156,4 @@ export default createStore({
 
 
 })
+

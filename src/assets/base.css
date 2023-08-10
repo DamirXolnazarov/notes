@@ -1,1 +1,15 @@
 /* color palette from <https://github.com/vuejs/theme> */
+#app{
+    width: 350px;
+    height: 800px;
+    margin: 0;
+    background: #f7f7f7;
+    position: relative;
+  }
+  html , body{
+    width: 350px;
+    height: 800px;
+    margin: 0;
+    padding: 0;
+    background: #f7f7f7;
+  }
