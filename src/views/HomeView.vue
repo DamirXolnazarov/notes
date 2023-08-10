@@ -68,8 +68,9 @@
             </svg>
           </div>
         </div>
-        <div @click="category()" class="categories items-center w-[100%] h-[150px] flex justify-start">
-          <div
+        <div class="fods w-[100%] overflow-x-scroll h-[100px] flex flex-row justify-between items-center">
+          <div @click="category()" class="categories items-center w-[100%] h-[100px] flex justify-start">
+            <div
             class="btn capitalize mr-[10px] bg-[#ffff] text-black font-semibold text-[13px] border-none hover:bg-[#eeeeee]"
             :class="{ 'red': selected == false }" @click="selected = !selected">All</div>
           <div
@@ -78,40 +79,42 @@
           <div v-for="i of this.folders" :key="i.id"
             class="folders mx-[5px] btn capitalize bg-[#ffff] text-black font-semibold text-[13px] border-none hover:bg-[#eeeeee] text-gray-400">
             {{ i.title }}</div>
-          <div @click="createFolder()"
-            class="newFolder btn mx-[5px] bg-[#ffff] border-0 shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] hover:bg-[#eeeeee]">
+          </div>
+          <div @click="createFolder()" class="newFolder mb-[15px] btn mx-[5px] bg-[#ffff] border-0 shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] hover:bg-[#eeeeee]">
             <svg width="30" height="22" viewBox="0 0 30 22" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M2.24428 19.7976L2.38683 1.56587" stroke="#EDD012" stroke-width="3" stroke-linecap="round" />
               <path d="M27.619 2.94519L14.4064 2.94519" stroke="#EDD012" stroke-width="3" stroke-linecap="round" />
               <path d="M27.619 19.7979V2.94519" stroke="#EDD012" stroke-width="3" stroke-linecap="round" />
               <path d="M27.6881 19.7976L2.24428 19.7976" stroke="#EDD012" stroke-width="3" stroke-linecap="round" />
               <path
-                d="M2.38246 1.56612H10.9259C11.9705 1.56612 12.958 2.04258 13.6081 2.86021L13.8736 3.19419C14.1837 3.58421 14.3525 4.06779 14.3525 4.56606V4.56606C14.3525 5.78349 15.3395 6.77042 16.5569 6.77042H27.4309"
-                stroke="#EDD012" stroke-width="3" stroke-linecap="round" />
+              d="M2.38246 1.56612H10.9259C11.9705 1.56612 12.958 2.04258 13.6081 2.86021L13.8736 3.19419C14.1837 3.58421 14.3525 4.06779 14.3525 4.56606V4.56606C14.3525 5.78349 15.3395 6.77042 16.5569 6.77042H27.4309"
+              stroke="#EDD012" stroke-width="3" stroke-linecap="round" />
             </svg>
           </div>
         </div>
-      </div>
-      <div class="notes w-[100%] overflow-y-scroll">
-        <div v-for="i of this.allTasks" :key="i.id"
+        </div>
+        <div class="notes overflow-y-scroll h-[100%]">
+          <div v-for="i of this.allTasks" :key="i.id"
           class="block w-[100%] my-[10px] flex flex-col justify-between items-start p-[15px] h-[120px] bg-[#fff] rounded-[15px]">
           <div class="title text-black font-semibold">{{ i.title }}</div>
           <div class="text text-[#707070] text-[15px]">{{ i.body }}</div>
           <div class="date text-[#707070] text-[13px]">{{ i.date }}</div>
         </div>
+      <div v-if="allTasks.length == 0" class="noNote w-[100%] flex flex-col h-[130px] justify-between items-center absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+        <svg width="99" height="95" viewBox="0 0 99 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0.469513" y="14.0793" width="70" height="80" rx="5" fill="#FFF1E2"/>
+          <rect x="13.0353" y="0.834259" width="70" height="80" rx="5" fill="#FBE9C3"/>
+<path d="M28.1671 22.0593H67.9036" stroke="white" stroke-width="4" stroke-linecap="round"/>
+<path d="M28.1671 34.9647H67.9036" stroke="white" stroke-width="4" stroke-linecap="round"/>
+<path d="M28.165 47.4267H54.133" stroke="white" stroke-width="4" stroke-linecap="round"/>
+<path d="M61.942 54.4164L59.2225 57.3497L65.0892 62.7886L67.8087 59.8553L61.942 54.4164ZM92.1678 21.8132L61.942 54.4164L67.8087 59.8553L98.0345 27.2522L92.1678 21.8132Z" fill="white"/>
+<path d="M59.9905 55.7028L66.4429 61.4107L58.7167 64.2228L59.9905 55.7028Z" fill="white"/>
+</svg>
+<span class="text-gray-500 text-[15px] block text-center">No notes here yet</span>
+</div>
+
       </div>
-      <div class="newFold flex flex-col justify-between items-center" v-if="newFold">
-        <form action="" class=" flex flex-col justify-between items-center" @submit.prevent="createF()">
-          <div
-            class="example m-[5px] btn capitalize bg-[#ffff] text-black font-semibold text-[13px] border-none hover:bg-[#eeeeee] text-gray-400">
-          </div>
-          <label class="text-left text-gray-400">Create a new folder
-            <input type="text" required placeholder="Enter the name of folder" v-model="nameFolder" @input="typeF()"
-              class="input input-bordered input-info w-full max-w-xs my-[15px]" />
-          </label>
-          <input type="submit" class="btn btn-info " value="Create">
-        </form>
-      </div>
+
     </swiper-slide>
     <swiper-slide class="sw px-[10px] h-[100%]">
       <div class="uncompleted my-[10px]" v-for="i of this.all" :key="i.id">
@@ -182,6 +185,18 @@
         </div>
       </div>
     </swiper-slide>
+    <div class="newFold flex flex-col justify-between items-center" v-if="newFold">
+        <form action="" class=" flex flex-col justify-between items-center" @submit.prevent="createF()">
+          <div
+            class="example m-[5px] btn capitalize bg-[#ffff] text-black font-semibold text-[13px] border-none hover:bg-[#eeeeee] text-gray-400">
+          </div>
+          <label class="text-left text-gray-400">Create a new folder
+            <input type="text" required placeholder="Enter the name of folder" v-model="nameFolder" @input="typeF()"
+              class="input input-bordered input-info w-full max-w-xs my-[15px]" />
+          </label>
+          <input type="submit" class="btn btn-info " value="Create">
+        </form>
+      </div>
     <div class="newTask flex flex-col justify-between items-center" v-if="createNote">
       <form action="" class=" flex flex-col justify-between items-center">
         <div
@@ -204,77 +219,77 @@
     <div @click="newNote()"
       class="fixedP btn bg-warning w-[50px] h-[50px] border-0 text-[50px] fixed bottom-[60px] left-[270px] z-10 text-white font-normal rounded-[50%]">
       <span class="mt-[-10px]">+</span></div>
-  </swiper>
-  <div :class="{'setAct' : setAct}" class="settings p-0 mb-0 m-0 flex flex-col mb-[100px] justify-flex start items-start absolute px-[20px] bg-white shadow-none w-[100%]">
-    <div @click="closeSet()" class="btn bg-white text-5xl border-0 text-black m-0 w-0 hover:bg-white focus:outline-0">&larr;</div>
-      <span class="text-[30px] text-thin text-black mt-[40px] mb-[30px]">Notes</span>
-      <div class="cloudService mb-[25px]">
-        <span class="uppercase text-gray-400 text-[15px]">cloud Service</span>
-        <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
-          <span class="w-[120px] text-black font-bold">Xiaomi Cloud</span>
-          <span class="flex flex-row justify-center items-center text-warning text-[14px]">Turn on the sync with the cloud
-            <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon" version="1.1"
-              xmlns="http://www.w3.org/2000/svg">
-              <path d="M256 120.768L306.432 64 768 512l-461.568 448L256 903.232 659.072 512z" fill="#000000" />
-            </svg></span>
-        </div>
-        <div class="block1 border-b-[1px] w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
-          <span class="text-black font-bold">Deleted notes in the cloud</span>
-          <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon" version="1.1"
-            xmlns="http://www.w3.org/2000/svg">
-            <path d="M256 120.768L306.432 64 768 512l-461.568 448L256 903.232 659.072 512z" fill="#000000" />
-          </svg>
-        </div>
-      </div>
-      <div class="style w-[100%] mb-[25px]">
-        <span class="uppercase text-gray-400 text-[15px]">STYLE</span>
-        <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
-          <span class="w-[120px] text-black font-bold">Font size</span>
-          <span class="flex flex-row justify-center items-center bg-white text-[14px]">
-            <select class="select bg-white border-0 shadow-none text-black focus:outline-0">
-              <option selected>Medium</option>
-              <option>Small</option>
-              <option>Large</option>
-            </select>
-          </span>
-        </div>
-        <div class="block1 border-b-[1px] w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
-          <span class="w-[120px] text-black font-bold">Sort</span>
-          <span class="flex flex-row justify-center items-center bg-white text-[14px]">
-            <select class="select bg-white border-0 shadow-none text-black focus:outline-0">
-              <option selected>By modification date</option>
-              <option></option>
-            </select>
-          </span>
-        </div>
-
-      </div>
-      <div class="quick w-[100%] mb-[25px]">
-        <span class="uppercase text-gray-400 text-[15px]">Quick features</span>
-        <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center border-b-[1px]">
-          <span class="w-[120px] text-black font-bold">Quick notes</span>
-          <span class="flex flex-row justify-center items-center bg-white text-[14px]">
-            <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon" version="1.1"
-              xmlns="http://www.w3.org/2000/svg">
-              <path d="M256 120.768L306.432 64 768 512l-461.568 448L256 903.232 659.072 512z" fill="#000000" />
-            </svg>
-          </span>
-        </div>
-
-      </div>
-      <div class="w-[100%]">
-        <span class="uppercase text-gray-400 text-[15px]">Reminders</span>
-        <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
-          <div class="left p-0">
-            <span class="w-[120px] text-black font-bold ">High-priority reminders</span>
-            <span class="flex flex-row justify-center items-center bg-white text-[14px]">
-              Play sound even when Silent or DND mode is on
-            </span>
+      <div :class="{'setAct' : setAct}" class="settings p-0 mb-0 m-0 flex flex-col mb-[100px] justify-flex start items-start absolute px-[20px] bg-white shadow-none w-[100%]">
+        <div @click="closeSet()" class="btn bg-white text-5xl border-0 text-black m-0 w-0 hover:bg-white focus:outline-0">&larr;</div>
+          <span class="text-[30px] text-thin text-black mt-[40px] mb-[30px]">Notes</span>
+          <div class="cloudService mb-[25px]">
+            <span class="uppercase text-gray-400 text-[15px]">cloud Service</span>
+            <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
+              <span class="w-[120px] text-black font-bold">Xiaomi Cloud</span>
+              <span class="flex flex-row justify-center items-center text-warning text-[14px]">Turn on the sync with the cloud
+                <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon" version="1.1"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path d="M256 120.768L306.432 64 768 512l-461.568 448L256 903.232 659.072 512z" fill="#000000" />
+                </svg></span>
+            </div>
+            <div class="block1 border-b-[1px] w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
+              <span class="text-black font-bold">Deleted notes in the cloud</span>
+              <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon" version="1.1"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M256 120.768L306.432 64 768 512l-461.568 448L256 903.232 659.072 512z" fill="#000000" />
+              </svg>
+            </div>
           </div>
-          <input type="checkbox" class="toggle" checked />
+          <div class="style w-[100%] mb-[25px]">
+            <span class="uppercase text-gray-400 text-[15px]">STYLE</span>
+            <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
+              <span class="w-[120px] text-black font-bold">Font size</span>
+              <span class="flex flex-row justify-center items-center bg-white text-[14px]">
+                <select class="select bg-white border-0 shadow-none text-black focus:outline-0">
+                  <option selected>Medium</option>
+                  <option>Small</option>
+                  <option>Large</option>
+                </select>
+              </span>
+            </div>
+            <div class="block1 border-b-[1px] w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
+              <span class="w-[120px] text-black font-bold">Sort</span>
+              <span class="flex flex-row justify-center items-center bg-white text-[14px]">
+                <select class="select bg-white border-0 shadow-none text-black focus:outline-0">
+                  <option selected>By modification date</option>
+                  <option></option>
+                </select>
+              </span>
+            </div>
+    
+          </div>
+          <div class="quick w-[100%] mb-[25px]">
+            <span class="uppercase text-gray-400 text-[15px]">Quick features</span>
+            <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center border-b-[1px]">
+              <span class="w-[120px] text-black font-bold">Quick notes</span>
+              <span class="flex flex-row justify-center items-center bg-white text-[14px]">
+                <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon" version="1.1"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path d="M256 120.768L306.432 64 768 512l-461.568 448L256 903.232 659.072 512z" fill="#000000" />
+                </svg>
+              </span>
+            </div>
+    
+          </div>
+          <div class="w-[100%]">
+            <span class="uppercase text-gray-400 text-[15px]">Reminders</span>
+            <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
+              <div class="left p-0">
+                <span class="w-[120px] text-black font-bold ">High-priority reminders</span>
+                <span class="flex flex-row justify-center items-center bg-white text-[14px]">
+                  Play sound even when Silent or DND mode is on
+                </span>
+              </div>
+              <input type="checkbox" class="toggle" checked />
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+  </swiper>
 </template>
 
 <script>
@@ -424,19 +439,17 @@ export default {
 .fixedP:hover {
   background: #fbbe23c6;
 }
-.notes{
-  overflow: scroll;
-}
 .settings{
   position: absolute;
   left: -100%;
   top: 0;
   transition: .3s;
   width: 100%;
-  height: 110vh;
+  height: 100%;
   z-index: 9999;
 }
 .setAct{
+  top: 0px;
   left: 0 !important;
 }
 header {
