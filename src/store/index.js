@@ -80,7 +80,6 @@ export default createStore({
         },
         ADD_NEW_FOLDER(state, folder) {
             state.folders.push(folder)
-            window.localStorage.folders = JSON.stringify(state.folders)
         },
         ADD_NEW_NOTE(state, note) {
             state.all.push(note)

@@ -364,7 +364,6 @@ export default {
       newNoteForm: {},
       setAct: false,
       current: true,
-      notesStore: JSON.parse(window.localStorage.note),
       selected: false,
       creF: false,
       month: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
@@ -499,16 +498,11 @@ export default {
     },
     createNewNote() {
       store.dispatch('ADD_NEW_NOTE', this.newNoteForm)
-      this.allTasks = this.notesStore
       this.createNote = !this.createNote
     },
   },
   created() {
-    if (this.notesStore !== undefined) {
-      this.allTasks = this.notesStore
-    } else {
-      this.allTasks = this.all
-    }
+    this.allTasks = this.all
   },
 
 };
@@ -632,11 +626,9 @@ header {
 @media screen and (min-width: 355px) {
   html{
     width: 100%;
-    background: red;
   }
   .swiper{
     width: 100%;
-    background: red;
   }
 } 
 </style>
