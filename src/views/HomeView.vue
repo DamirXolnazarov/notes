@@ -621,4 +621,22 @@ header {
   overflow-wrap: normal;
   width: 100%;
 }
+@media screen and (max-width: 355px) {
+  #app{
+    width: 355px;
+  }
+  body , html{
+    width: 355px;
+  }
+}
+@media screen and (min-width: 355px) {
+  html{
+    width: 100%;
+    background: red;
+  }
+  .swiper{
+    width: 100%;
+    background: red;
+  }
+} 
 </style>
