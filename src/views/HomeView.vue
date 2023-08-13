@@ -80,7 +80,7 @@
               {{ i.title }}</div>
           </div>
           <div @click="createFolder()"
-            class="newFolder mb-[15px] btn mx-[5px] bg-[#ffff] border-0 shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] hover:bg-[#eeeeee]">
+            class="newFolder btn ml-[10px] bg-[#ffff] border-0 shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] hover:bg-[#eeeeee]">
             <svg width="30" height="22" viewBox="0 0 30 22" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M2.24428 19.7976L2.38683 1.56587" stroke="#EDD012" stroke-width="3" stroke-linecap="round" />
               <path d="M27.619 2.94519L14.4064 2.94519" stroke="#EDD012" stroke-width="3" stroke-linecap="round" />
@@ -260,7 +260,7 @@
       </form>
     </div>
     <div @click="newNote()"
-      class="fixedP btn bg-warning w-[50px] h-[50px] border-0 text-[50px] fixed bottom-[60px] left-[270px] z-10 text-white font-normal rounded-[50%]">
+      class="fixedP btn bg-warning w-[50px] h-[50px] border-0 text-[50px] fixed bottom-[60px] right-[30px] z-10 text-white font-normal rounded-[50%]">
       <span class="mt-[-10px]">+</span>
     </div>
     <div :class="{ 'setAct': setAct }"
