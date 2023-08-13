@@ -30,93 +30,34 @@ export default createStore({
                 date: 'Today 10:00',
                 body: 'Visit a library'
             },
-            {
-                title: 'Run',
-                id: 124124124,
-                folder: 4,
-                date: 'Tomoroow 15:00',
-                body: 'Run off-road'
-            },
-            {
-                title: 'Run',
-                id: 124124124,
-                folder: 4,
-                date: 'Tomoroow 15:00',
-                body: 'Run off-road'
-            },
-            {
-                title: 'Run',
-                id: 124124124,
-                folder: 4,
-                date: 'Tomoroow 15:00',
-                body: 'Run off-road'
-            },
-            {
-                title: 'Run',
-                id: 124124124,
-                folder: 4,
-                date: 'Tomoroow 15:00',
-                body: 'Run off-road'
-            },
         ],
         folders: [
             {
                 id: 1,
                 title: 'Must',
                 todos: [
-                    {
-                        title: 'Wake up',
-                        id: 124124124,
-                        folder: 1,
-                        date: '10 avgust',
-                        body: 'Wake up'
-                    },
-                    {
-                        title: 'Read book',
-                        id: 122354,
-                        folder: 1,
-                        date: '1 september',
-                        body: 'Read book'
-                    },
+
                 ],
             },
             {
                 id: 2,
                 title: 'Probable',
                 todos: [
-                    {
-                        title: 'Breakfast',
-                        id: 124326434,
-                        folder: 2,
-                        date: '9 avgust',
-                        body: 'Have a breakfast'
-                    },
+
                 ],
             },
             {
                 id: 3,
                 title: 'Warning',
                 todos: [
-                    {
-                        title: 'Library',
-                        id: 111,
-                        folder: 3,
-                        date: 'Today 10:00',
-                        body: 'Visit a library'
-                    },
+
                 ],
             },
             {
                 id: 4,
                 title: 'Rest',
                 todos: [
-                    {
-                        title: 'Run',
-                        id: 124124124,
-                        folder: 4,
-                        date: 'Tomoroow 15:00',
-                        body: 'Run off-road'
-                    },
+
                 ],
             },
 
@@ -139,7 +80,12 @@ export default createStore({
         },
         ADD_NEW_FOLDER(state, folder) {
             state.folders.push(folder)
+            window.localStorage.folder = JSON.stringify(state.folders)
         },
+        ADD_NEW_NOTE(state, note) {
+            state.all.push(note)
+            window.localStorage.note = JSON.stringify(state.all)
+        }
     },
     actions: {
         DONE_MUTATION({ commit }, task) {
@@ -147,6 +93,9 @@ export default createStore({
         },
         ADD_NEW_FOLDER({ commit }, folder) {
             commit("ADD_NEW_FOLDER", folder)
+        },
+        ADD_NEW_NOTE({ commit }, note) {
+            commit("ADD_NEW_NOTE", note)
         },
     }
     // REMOVE_FAVOURITE({ commit }, item) {

@@ -3,7 +3,6 @@
 </script>
 
 <template>
- 
   <header class="bg-[#f7f7f7] fixed top-0 left-0 flex justify-center items-center relative ">
     <div class="files mr-[55px]" @click="file()">
       <svg width="22" height="21" v-if="current == false" class="cursor-pointer" @click="pageHide()" viewBox="0 0 22 21"
@@ -53,12 +52,12 @@
       </svg>
     </div>
   </header>
-   
+
   <swiper @real-index-change="af()" :navigation="true" :modules="modules" class="mySwiper">
     <swiper-slide class="sw px-[10px]">
       <div class="top w-[100%] h-[150px] flex flex-col">
         <div class="search w-[100%] h-[50px] relative">
-          <input type="text" placeholder="Search notes"
+          <input type="text" @input="search(searc)" v-model="searc" placeholder="Search notes"
             class="bg-[#e4e4e4] w-[100%] h-[45px] rounded-[20px] text-gray-500 placeholder:text-gray-500 text-[15px] font-normal pl-[50px] focus:outline-0">
           <div class="searchIcon cursor-pointer absolute top-[13px] left-[13px] rotate-[-10deg]">
             <svg width="16" height="22" viewBox="0 0 18 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -68,50 +67,54 @@
             </svg>
           </div>
         </div>
-        <div class="fods w-[100%] overflow-x-scroll h-[100px] flex flex-row justify-between items-center">
+        <div class="fods w-[100%] h-[100px] flex flex-row justify-between items-center">
           <div @click="category()" class="categories items-center w-[100%] h-[100px] flex justify-start">
             <div
-            class="btn capitalize mr-[10px] bg-[#ffff] text-black font-semibold text-[13px] border-none hover:bg-[#eeeeee]"
-            :class="{ 'red': selected == false }" @click="selected = !selected">All</div>
-          <div
-            class="category btn capitalize bg-[#ffff] text-black font-semibold text-[13px] border-none hover:bg-[#eeeeee] text-gray-400"
-            :class="{ 'red': selected }" @click="selected = !selected">Uncategorized</div>
-          <div v-for="i of this.folders" :key="i.id"
-            class="folders mx-[5px] btn capitalize bg-[#ffff] text-black font-semibold text-[13px] border-none hover:bg-[#eeeeee] text-gray-400">
-            {{ i.title }}</div>
+              class="btn capitalize mr-[10px] bg-[#ffff] text-black font-semibold text-[13px] border-none hover:bg-[#eeeeee]"
+              :class="{ 'red': selected == false }" @click="selected = !selected">All</div>
+            <div
+              class="category btn capitalize bg-[#ffff] text-black font-semibold text-[13px] border-none hover:bg-[#eeeeee] text-gray-400"
+              :class="{ 'red': selected }" @click="selected = !selected">Uncategorized</div>
+            <div v-for="i of this.folders" :key="i.id"
+              class="folders mx-[5px] btn capitalize bg-[#ffff] text-black font-semibold text-[13px] border-none hover:bg-[#eeeeee] text-gray-400">
+              {{ i.title }}</div>
           </div>
-          <div @click="createFolder()" class="newFolder mb-[15px] btn mx-[5px] bg-[#ffff] border-0 shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] hover:bg-[#eeeeee]">
+          <div @click="createFolder()"
+            class="newFolder mb-[15px] btn mx-[5px] bg-[#ffff] border-0 shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px] hover:bg-[#eeeeee]">
             <svg width="30" height="22" viewBox="0 0 30 22" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M2.24428 19.7976L2.38683 1.56587" stroke="#EDD012" stroke-width="3" stroke-linecap="round" />
               <path d="M27.619 2.94519L14.4064 2.94519" stroke="#EDD012" stroke-width="3" stroke-linecap="round" />
               <path d="M27.619 19.7979V2.94519" stroke="#EDD012" stroke-width="3" stroke-linecap="round" />
               <path d="M27.6881 19.7976L2.24428 19.7976" stroke="#EDD012" stroke-width="3" stroke-linecap="round" />
               <path
-              d="M2.38246 1.56612H10.9259C11.9705 1.56612 12.958 2.04258 13.6081 2.86021L13.8736 3.19419C14.1837 3.58421 14.3525 4.06779 14.3525 4.56606V4.56606C14.3525 5.78349 15.3395 6.77042 16.5569 6.77042H27.4309"
-              stroke="#EDD012" stroke-width="3" stroke-linecap="round" />
+                d="M2.38246 1.56612H10.9259C11.9705 1.56612 12.958 2.04258 13.6081 2.86021L13.8736 3.19419C14.1837 3.58421 14.3525 4.06779 14.3525 4.56606V4.56606C14.3525 5.78349 15.3395 6.77042 16.5569 6.77042H27.4309"
+                stroke="#EDD012" stroke-width="3" stroke-linecap="round" />
             </svg>
           </div>
         </div>
-        </div>
-        <div class="notes overflow-y-scroll h-[100%]">
-          <div v-for="i of this.allTasks" :key="i.id"
+      </div>
+      <div class="notes overflow-y-scroll pb-[150px] h-[100%]">
+        <div v-for="i of this.allTasks" :key="i.id"
           class="block w-[100%] my-[10px] flex flex-col justify-between items-start p-[15px] h-[120px] bg-[#fff] rounded-[15px]">
           <div class="title text-black font-semibold">{{ i.title }}</div>
           <div class="text text-[#707070] text-[15px]">{{ i.body }}</div>
           <div class="date text-[#707070] text-[13px]">{{ i.date }}</div>
         </div>
-      <div v-if="allTasks.length == 0" class="noNote w-[100%] flex flex-col h-[130px] justify-between items-center absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-        <svg width="99" height="95" viewBox="0 0 99 95" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="0.469513" y="14.0793" width="70" height="80" rx="5" fill="#FFF1E2"/>
-          <rect x="13.0353" y="0.834259" width="70" height="80" rx="5" fill="#FBE9C3"/>
-<path d="M28.1671 22.0593H67.9036" stroke="white" stroke-width="4" stroke-linecap="round"/>
-<path d="M28.1671 34.9647H67.9036" stroke="white" stroke-width="4" stroke-linecap="round"/>
-<path d="M28.165 47.4267H54.133" stroke="white" stroke-width="4" stroke-linecap="round"/>
-<path d="M61.942 54.4164L59.2225 57.3497L65.0892 62.7886L67.8087 59.8553L61.942 54.4164ZM92.1678 21.8132L61.942 54.4164L67.8087 59.8553L98.0345 27.2522L92.1678 21.8132Z" fill="white"/>
-<path d="M59.9905 55.7028L66.4429 61.4107L58.7167 64.2228L59.9905 55.7028Z" fill="white"/>
-</svg>
-<span class="text-gray-500 text-[15px] block text-center">No notes here yet</span>
-</div>
+        <div v-if="allTasks.length == 0"
+          class="noNote w-[100%] flex flex-col h-[130px] justify-between items-center absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+          <svg width="99" height="95" viewBox="0 0 99 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0.469513" y="14.0793" width="70" height="80" rx="5" fill="#FFF1E2" />
+            <rect x="13.0353" y="0.834259" width="70" height="80" rx="5" fill="#FBE9C3" />
+            <path d="M28.1671 22.0593H67.9036" stroke="white" stroke-width="4" stroke-linecap="round" />
+            <path d="M28.1671 34.9647H67.9036" stroke="white" stroke-width="4" stroke-linecap="round" />
+            <path d="M28.165 47.4267H54.133" stroke="white" stroke-width="4" stroke-linecap="round" />
+            <path
+              d="M61.942 54.4164L59.2225 57.3497L65.0892 62.7886L67.8087 59.8553L61.942 54.4164ZM92.1678 21.8132L61.942 54.4164L67.8087 59.8553L98.0345 27.2522L92.1678 21.8132Z"
+              fill="white" />
+            <path d="M59.9905 55.7028L66.4429 61.4107L58.7167 64.2228L59.9905 55.7028Z" fill="white" />
+          </svg>
+          <span class="text-gray-500 text-[15px] block text-center">No notes here yet</span>
+        </div>
 
       </div>
 
@@ -185,10 +188,49 @@
         </div>
       </div>
     </swiper-slide>
-    <div class="newFold flex flex-col justify-between items-center" v-if="newFold">
-        <form action="" class=" flex flex-col justify-between items-center" @submit.prevent="createF()">
+    <div class="newFold px-[15px] flex flex-col justify-start items-center w-[100%] h-[100%]'"
+      :class="{ 'actFold': newFold }">
+      <div class="title w-[100%] h-[50px] flex flex-row justify-between items-center">
+        <div @click="closeFold()"
+          class="btn bg-[#f7f7f7] text-5xl border-0 text-black m-0 w-0 hover:bg-[#f7f7f7] focus:outline-0">&larr;</div>
+        <span class="text-xl block text-gray-600">Folders</span>
+        <svg width="30" class="cursor-pointer" height="38" viewBox="0 0 30 38" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <rect x="1.33724" y="0.0464397" width="15.8376" height="10.231" rx="2"
+            transform="matrix(0.694417 -0.719573 0.642826 0.766013 5.34729 12.7745)" fill="white" stroke="black"
+            stroke-width="2" />
+          <rect x="4.47003" y="11.0991" width="21.2461" height="25.4459" rx="4" fill="white" stroke="black"
+            stroke-width="2" />
+          <line x1="0.949707" y1="10.8014" x2="29.2364" y2="10.8014" stroke="black" stroke-width="2" />
+          <line x1="9.19434" y1="18.6506" x2="9.19434" y2="28.9934" stroke="black" stroke-width="2" />
+          <line x1="22.2703" y1="18.5987" x2="22.2703" y2="28.9415" stroke="black" stroke-width="2" />
+          <line x1="16.093" y1="18.5987" x2="16.093" y2="28.9415" stroke="black" stroke-width="2" />
+        </svg>
+
+      </div>
+      <div class="folders w-[100%] h-[100%] flex flex-col">
+        <div
+          class="fold w-[100%] cursor-pointer h-[70px] flex flex-row items-center px-[15px] justify-between bg-white rounded-[10px] my-[7px]"
+          v-for="i of folders" :key="i.id">
+          <input type="checkbox" class="checkbox checkbox-warning" name="" id="">
+          <span class="ml-[-150px] text-gray-600 font-semibold">{{ i.title }}</span>
+          <span class="text-gray-600">{{ i.todos.length }}</span>
+        </div>
+        <div @click="creeF()"
+          class="addNewFolder cursor-pointer bg-white rounded-[15px] w-[100%] h-[120px] flex flex-col items-center justify-center">
           <div
-            class="example m-[5px] btn capitalize bg-[#ffff] text-black font-semibold text-[13px] border-none hover:bg-[#eeeeee] text-gray-400">
+            class="plus w-[30px] h-[30px] text-white font-semibold text-[25px] cursor-pointer rounded-[50%] flex flex-row items-center justify-center bg-warning">
+            +</div>
+          <span class="text-gray-600 text-[13px]">New folder</span>
+        </div>
+      </div>
+      <div class="creF" :class="{ 'actCreF': creF }">
+        <form class="" @submit.prevent="createF()">
+          <div
+            class="fold w-[100%] cursor-pointer h-[70px] flex flex-row items-center px-[15px] justify-between bg-white rounded-[10px] my-[7px]">
+            <input type="checkbox" class="checkbox checkbox-warning" name="" id="">
+            <span class="example ml-[-150px] text-gray-600 font-semibold"></span>
+            <span class="text-gray-600">0</span>
           </div>
           <label class="text-left text-gray-400">Create a new folder
             <input type="text" required placeholder="Enter the name of folder" v-model="nameFolder" @input="typeF()"
@@ -197,8 +239,9 @@
           <input type="submit" class="btn btn-info " value="Create">
         </form>
       </div>
+    </div>
     <div class="newTask flex flex-col justify-between items-center" v-if="createNote">
-      <form action="" class=" flex flex-col justify-between items-center">
+      <form action="" class=" flex flex-col justify-between items-center" @submit.prevent="createNewNote()">
         <div
           class="w-[100%] my-[10px] flex flex-col justify-between items-start p-[15px] h-[120px] bg-[#fff] rounded-[15px]">
           <div id="title" class="title text-black font-semibold"></div>
@@ -210,85 +253,88 @@
             class="input input-bordered input-info w-full bg-white max-w-xs my-[15px]" />
           <input type="text" required placeholder="Enter the description of note" v-model="taskMsg" @input="taskMsge()"
             class="input input-bordered input-info w-full bg-white max-w-xs my-[15px]" />
-          <input type="datetime-local" required placeholder="Enter the date of note" v-model="taskDate" @input="taskDatee()"
-            class="input input-bordered input-info w-full bg-white w-[100%] my-[15px]" />
+          <input type="datetime-local" required placeholder="Enter the date of note" v-model="taskDate"
+            @input="taskDatee()" class="input input-bordered input-info w-full bg-white w-[100%] my-[15px]" />
         </label>
         <input type="submit" class="btn btn-info text-white" value="Create">
       </form>
     </div>
     <div @click="newNote()"
       class="fixedP btn bg-warning w-[50px] h-[50px] border-0 text-[50px] fixed bottom-[60px] left-[270px] z-10 text-white font-normal rounded-[50%]">
-      <span class="mt-[-10px]">+</span></div>
-      <div :class="{'setAct' : setAct}" class="settings p-0 mb-0 m-0 flex flex-col mb-[100px] justify-flex start items-start absolute px-[20px] bg-white shadow-none w-[100%]">
-        <div @click="closeSet()" class="btn bg-white text-5xl border-0 text-black m-0 w-0 hover:bg-white focus:outline-0">&larr;</div>
-          <span class="text-[30px] text-thin text-black mt-[40px] mb-[30px]">Notes</span>
-          <div class="cloudService mb-[25px]">
-            <span class="uppercase text-gray-400 text-[15px]">cloud Service</span>
-            <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
-              <span class="w-[120px] text-black font-bold">Xiaomi Cloud</span>
-              <span class="flex flex-row justify-center items-center text-warning text-[14px]">Turn on the sync with the cloud
-                <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon" version="1.1"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path d="M256 120.768L306.432 64 768 512l-461.568 448L256 903.232 659.072 512z" fill="#000000" />
-                </svg></span>
-            </div>
-            <div class="block1 border-b-[1px] w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
-              <span class="text-black font-bold">Deleted notes in the cloud</span>
-              <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon" version="1.1"
-                xmlns="http://www.w3.org/2000/svg">
-                <path d="M256 120.768L306.432 64 768 512l-461.568 448L256 903.232 659.072 512z" fill="#000000" />
-              </svg>
-            </div>
-          </div>
-          <div class="style w-[100%] mb-[25px]">
-            <span class="uppercase text-gray-400 text-[15px]">STYLE</span>
-            <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
-              <span class="w-[120px] text-black font-bold">Font size</span>
-              <span class="flex flex-row justify-center items-center bg-white text-[14px]">
-                <select class="select bg-white border-0 shadow-none text-black focus:outline-0">
-                  <option selected>Medium</option>
-                  <option>Small</option>
-                  <option>Large</option>
-                </select>
-              </span>
-            </div>
-            <div class="block1 border-b-[1px] w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
-              <span class="w-[120px] text-black font-bold">Sort</span>
-              <span class="flex flex-row justify-center items-center bg-white text-[14px]">
-                <select class="select bg-white border-0 shadow-none text-black focus:outline-0">
-                  <option selected>By modification date</option>
-                  <option></option>
-                </select>
-              </span>
-            </div>
-    
-          </div>
-          <div class="quick w-[100%] mb-[25px]">
-            <span class="uppercase text-gray-400 text-[15px]">Quick features</span>
-            <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center border-b-[1px]">
-              <span class="w-[120px] text-black font-bold">Quick notes</span>
-              <span class="flex flex-row justify-center items-center bg-white text-[14px]">
-                <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon" version="1.1"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path d="M256 120.768L306.432 64 768 512l-461.568 448L256 903.232 659.072 512z" fill="#000000" />
-                </svg>
-              </span>
-            </div>
-    
-          </div>
-          <div class="w-[100%]">
-            <span class="uppercase text-gray-400 text-[15px]">Reminders</span>
-            <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
-              <div class="left p-0">
-                <span class="w-[120px] text-black font-bold ">High-priority reminders</span>
-                <span class="flex flex-row justify-center items-center bg-white text-[14px]">
-                  Play sound even when Silent or DND mode is on
-                </span>
-              </div>
-              <input type="checkbox" class="toggle" checked />
-            </div>
-          </div>
+      <span class="mt-[-10px]">+</span>
+    </div>
+    <div :class="{ 'setAct': setAct }"
+      class="settings p-0 mb-0 m-0 flex flex-col justify-flex start items-start absolute px-[20px] bg-white shadow-none w-[100%]">
+      <div @click="closeSet()" class="btn bg-white text-5xl border-0 text-black m-0 w-0 hover:bg-white focus:outline-0">
+        &larr;</div>
+      <span class="text-[30px] text-thin text-black mt-[40px] mb-[30px]">Notes</span>
+      <div class="cloudService mb-[25px]">
+        <span class="uppercase text-gray-400 text-[15px]">cloud Service</span>
+        <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
+          <span class="w-[120px] text-black font-bold">Xiaomi Cloud</span>
+          <span class="flex flex-row justify-center items-center text-warning text-[14px]">Turn on the sync with the cloud
+            <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon" version="1.1"
+              xmlns="http://www.w3.org/2000/svg">
+              <path d="M256 120.768L306.432 64 768 512l-461.568 448L256 903.232 659.072 512z" fill="#000000" />
+            </svg></span>
         </div>
+        <div class="block1 border-b-[1px] w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
+          <span class="text-black font-bold">Deleted notes in the cloud</span>
+          <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon" version="1.1"
+            xmlns="http://www.w3.org/2000/svg">
+            <path d="M256 120.768L306.432 64 768 512l-461.568 448L256 903.232 659.072 512z" fill="#000000" />
+          </svg>
+        </div>
+      </div>
+      <div class="style w-[100%] mb-[25px]">
+        <span class="uppercase text-gray-400 text-[15px]">STYLE</span>
+        <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
+          <span class="w-[120px] text-black font-bold">Font size</span>
+          <span class="flex flex-row justify-center items-center bg-white text-[14px]">
+            <select class="select bg-white border-0 shadow-none text-black focus:outline-0">
+              <option selected>Medium</option>
+              <option>Small</option>
+              <option>Large</option>
+            </select>
+          </span>
+        </div>
+        <div class="block1 border-b-[1px] w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
+          <span class="w-[120px] text-black font-bold">Sort</span>
+          <span class="flex flex-row justify-center items-center bg-white text-[14px]">
+            <select class="select bg-white border-0 shadow-none text-black focus:outline-0">
+              <option selected>By modification date</option>
+              <option></option>
+            </select>
+          </span>
+        </div>
+
+      </div>
+      <div class="quick w-[100%] mb-[25px]">
+        <span class="uppercase text-gray-400 text-[15px]">Quick features</span>
+        <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center border-b-[1px]">
+          <span class="w-[120px] text-black font-bold">Quick notes</span>
+          <span class="flex flex-row justify-center items-center bg-white text-[14px]">
+            <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon" version="1.1"
+              xmlns="http://www.w3.org/2000/svg">
+              <path d="M256 120.768L306.432 64 768 512l-461.568 448L256 903.232 659.072 512z" fill="#000000" />
+            </svg>
+          </span>
+        </div>
+
+      </div>
+      <div class="w-[100%]">
+        <span class="uppercase text-gray-400 text-[15px]">Reminders</span>
+        <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
+          <div class="left p-0">
+            <span class="w-[120px] text-black font-bold ">High-priority reminders</span>
+            <span class="flex flex-row justify-center items-center bg-white text-[14px]">
+              Play sound even when Silent or DND mode is on
+            </span>
+          </div>
+          <input type="checkbox" class="toggle" checked />
+        </div>
+      </div>
+    </div>
   </swiper>
 </template>
 
@@ -314,10 +360,14 @@ export default {
       folders: store.state.folders,
       completed: store.state.completed,
       nameFolder: '',
-      realFolderId: '',
+      realFolderId: '1',
+      newNoteForm: {},
       setAct: false,
       current: true,
+      notesStore: JSON.parse(window.localStorage.note),
       selected: false,
+      creF: false,
+      month: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
       dateOfNote: '',
       createNote: false,
       taskDate: '',
@@ -325,6 +375,7 @@ export default {
       taskTime: '',
       taskName: '',
       newFold: false,
+      searc: '',
       allTasks: [],
       presentArr: [],
     };
@@ -353,10 +404,10 @@ export default {
         this.current = false
       }
     },
-    setActive(){
+    setActive() {
       this.setAct = !this.setAct
     },
-    closeSet(){
+    closeSet() {
       this.setAct = !this.setAct
     },
     createFolder() {
@@ -369,6 +420,9 @@ export default {
         todos: [],
       }
       store.dispatch('ADD_NEW_FOLDER', newF)
+      this.creF = !this.creF
+    },
+    closeFold() {
       this.newFold = !this.newFold
     },
     typeF() {
@@ -396,6 +450,9 @@ export default {
         }
       }
     },
+    creeF() {
+      this.creF = !this.creF
+    },
     newNote() {
       this.createNote = !this.createNote
     },
@@ -409,27 +466,49 @@ export default {
     },
     taskDatee() {
       let datee = document.querySelector('#date')
-        let date = new Date(this.taskDate)
-        if(new Date().getFullYear() == date.getFullYear() && new Date().getMonth() == date.getMonth() && new Date().getDay() == date.getDay()){
-          if(date.getMinutes().toString().split('').length == 1){
-            let hour = date.getHours()
-            let minute = date.getMinutes()
-            datee.innerHTML = `Today ${hour}:0${minute}`
-          }else{
-            let hour = date.getHours()
-            let minute = date.getMinutes()
-            datee.innerHTML = `Today ${hour}:${minute}`
-          }
+      let date = new Date(this.taskDate)
+      if (new Date().getFullYear() == date.getFullYear() && new Date().getMonth() == date.getMonth() && new Date().getDay() == date.getDay()) {
+        if (date.getMinutes().toString().split('').length == 1) {
+          let hour = date.getHours()
+          let minute = date.getMinutes()
+          datee.innerHTML = `Today ${hour}:0${minute}`
+        } else {
+          let hour = date.getHours()
+          let minute = date.getMinutes()
+          datee.innerHTML = `Today ${hour}:${minute}`
+        }
+      } else {
+        if (parseInt(this.taskDate.toString().split('-')[1].toString('')) < 10) {
+          let month = this.taskDate.toString().split('-')[1].toString('')[1]
+          let day = date.getDate()
+          datee.innerHTML = `${this.month[parseInt(month) - 1]} ${day}`
+        } else {
+          let day = date.getDate()
+          let month = this.taskDate.toString().split('-')[1].toString('')
+          datee.innerHTML = `${this.month[parseInt(month) - 1]} ${day}`
+        }
       }
+      let note = {
+        title: this.taskName,
+        id: 1285612,
+        folder: this.realFolderId,
+        date: datee.innerHTML,
+        body: this.taskMsg
+      }
+      this.newNoteForm = note
     },
-    // taskTimee() {
-      // let time = document.querySelector('#date')
-      // time.innerHTML = this.taskTime
-    // },
-
+    createNewNote() {
+      store.dispatch('ADD_NEW_NOTE', this.newNoteForm)
+      this.allTasks = this.notesStore
+      this.createNote = !this.createNote
+    },
   },
   created() {
-    this.allTasks = this.all
+    if (this.notesStore !== undefined) {
+      this.allTasks = this.notesStore
+    } else {
+      this.allTasks = this.all
+    }
   },
 
 };
@@ -439,7 +518,8 @@ export default {
 .fixedP:hover {
   background: #fbbe23c6;
 }
-.settings{
+
+.settings {
   position: absolute;
   left: -100%;
   top: 0;
@@ -448,25 +528,50 @@ export default {
   height: 100%;
   z-index: 9999;
 }
-.setAct{
+
+.setAct {
   top: 0px;
   left: 0 !important;
 }
+
 header {
   width: 100%;
   height: 80px;
 
 }
 
+.actCreF {
+  bottom: 0 !important;
+}
+
+.creF {
+  padding: 15px;
+  width: 100%;
+  height: 80%;
+  background: rgb(231, 231, 231);
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  bottom: -100%;
+  left: 0;
+  transition: .3s;
+}
+
 .newFold {
   width: 100%;
-  height: 90%;
+  height: 100%;
   position: absolute;
-  bottom: 0;
+  top: 0;
   z-index: 124124;
-  padding: 30px;
-  left: 0;
-  background: rgb(231, 231, 231);
+  left: -100%;
+  background: #f7f7f7;
+  transition: .3s;
+}
+
+.actFold {
+  left: 0 !important;
 }
 
 .newTask {
@@ -515,4 +620,5 @@ header {
   overflow-y: hidden;
   overflow-wrap: normal;
   width: 100%;
-}</style>
+}
+</style>
