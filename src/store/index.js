@@ -2,66 +2,10 @@ import { createStore } from "vuex"
 export default createStore({
     state: {
         all: [
-            {
-                title: 'Wake up',
-                id: 124124124,
-                folder: 1,
-                date: '10 avgust',
-                body: 'Wake up'
-            },
-            {
-                title: 'Breakfast',
-                id: 124326434,
-                folder: 2,
-                date: '9 avgust',
-                body: 'Have a breakfast'
-            },
-            {
-                title: 'Read book',
-                id: 122354,
-                folder: 1,
-                date: '1 september',
-                body: 'Read book'
-            },
-            {
-                title: 'Library',
-                id: 111,
-                folder: 3,
-                date: 'Today 10:00',
-                body: 'Visit a library'
-            },
+       
         ],
         folders: [
-            {
-                id: 1,
-                title: 'Must',
-                todos: [
-
-                ],
-            },
-            {
-                id: 2,
-                title: 'Probable',
-                todos: [
-
-                ],
-            },
-            {
-                id: 3,
-                title: 'Warning',
-                todos: [
-
-                ],
-            },
-            {
-                id: 4,
-                title: 'Rest',
-                todos: [
-
-                ],
-            },
-
-
+            
         ],
         completed: [
 
@@ -83,7 +27,7 @@ export default createStore({
         },
         ADD_NEW_NOTE(state, note) {
             state.all.push(note)
-        }
+        },
     },
     actions: {
         DONE_MUTATION({ commit }, task) {

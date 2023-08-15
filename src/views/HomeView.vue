@@ -41,7 +41,7 @@
           stroke-linejoin="round" />
       </svg>
     </div>
-    <div class="nastroyka absolute right-5" @click="setActive()">
+    <div class="troyka absolute right-5" @click="setActive()">
       <svg width="21" class="cursor-pointer" height="25" viewBox="0 0 21 25" fill="none"
         xmlns="http://www.w3.org/2000/svg">
         <path
@@ -70,11 +70,11 @@
         <div class="fods w-[100%] h-[100px] flex flex-row justify-between items-center">
           <div @click="category()" class="categories items-center w-[100%] h-[100px] flex justify-start">
             <div
-              class="btn capitalize mr-[10px] bg-[#ffff] text-black font-semibold text-[13px] border-none hover:bg-[#eeeeee]"
-              :class="{ 'red': selected == false }" @click="selected = !selected">All</div>
+              class="btn capitalize mr-[10px] bg-[#ffff] text-black font-semibold text-[13px] border-none hover:bg-[#eeeeee]">
+              All</div>
             <div
               class="category btn capitalize bg-[#ffff] text-black font-semibold text-[13px] border-none hover:bg-[#eeeeee] text-gray-400"
-              :class="{ 'red': selected }" @click="selected = !selected">Uncategorized</div>
+            >Uncategorized</div>
             <div v-for="i of this.folders" :key="i.id"
               class="folders mx-[5px] btn capitalize bg-[#ffff] text-black font-semibold text-[13px] border-none hover:bg-[#eeeeee] text-gray-400">
               {{ i.title }}</div>
@@ -95,7 +95,7 @@
       </div>
       <div class="notes overflow-y-scroll pb-[150px] h-[100%]">
         <div v-for="i of this.allTasks" :key="i.id"
-          class="block w-[100%] my-[10px] flex flex-col justify-between items-start p-[15px] h-[120px] bg-[#fff] rounded-[15px]">
+          class="block w-[100%] my-[10px] flex flex-col justify-between items-start p-[15px] h-[120px] bg-[#fff] rounded-[15px] waves-effect waves-light r">
           <div class="title text-black font-semibold">{{ i.title }}</div>
           <div class="text text-[#707070] text-[15px]">{{ i.body }}</div>
           <div class="date text-[#707070] text-[13px]">{{ i.date }}</div>
@@ -194,7 +194,7 @@
         <div @click="closeFold()"
           class="btn bg-[#f7f7f7] text-5xl border-0 text-black m-0 w-0 hover:bg-[#f7f7f7] focus:outline-0">&larr;</div>
         <span class="text-xl block text-gray-600">Folders</span>
-        <svg width="30" class="cursor-pointer" height="38" viewBox="0 0 30 38" fill="none"
+        <svg @click="deleteFolder()" width="30" class="cursor-pointer" height="38" viewBox="0 0 30 38" fill="none"
           xmlns="http://www.w3.org/2000/svg">
           <rect x="1.33724" y="0.0464397" width="15.8376" height="10.231" rx="2"
             transform="matrix(0.694417 -0.719573 0.642826 0.766013 5.34729 12.7745)" fill="white" stroke="black"
@@ -211,7 +211,7 @@
       <div class="folders w-[100%] h-[100%] flex flex-col">
         <div
           class="fold w-[100%] cursor-pointer h-[70px] flex flex-row items-center px-[15px] justify-between bg-white rounded-[10px] my-[7px]"
-          v-for="i of folders" :key="i.id">
+          v-for="i of this.folders" :key="i.id">
           <input type="checkbox" class="checkbox checkbox-warning" name="" id="">
           <span class="ml-[-150px] text-gray-600 font-semibold">{{ i.title }}</span>
           <span class="text-gray-600">{{ i.todos.length }}</span>
@@ -240,7 +240,11 @@
         </form>
       </div>
     </div>
-    <div class="newTask flex flex-col justify-between items-center" v-if="createNote">
+    <div class="newTask flex flex-col justify-center items-center" :class="{ 'actNewTask': createNote }">
+      <div class="m-auto cursor-pointer h-[30px] absolute top-[30px]" @click="createNote = !createNote"><svg width="25px"
+          class="" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 9L12 15L18 9" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg></div>
       <form action="" class=" flex flex-col justify-between items-center" @submit.prevent="createNewNote()">
         <div
           class="w-[100%] my-[10px] flex flex-col justify-between items-start p-[15px] h-[120px] bg-[#fff] rounded-[15px]">
@@ -248,7 +252,7 @@
           <div id="text" class="text text-[#707070] text-[15px]"></div>
           <div id="date" class="date text-[#707070] text-[13px]"></div>
         </div>
-        <label class="text-left text-gray-400">Create a new note
+        <label class="text-left text-gray-400">Create a new note <br>
           <input type="text" required placeholder="Enter the name of note" v-model="taskName" @input="taskNamee()"
             class="input input-bordered input-info w-full bg-white max-w-xs my-[15px]" />
           <input type="text" required placeholder="Enter the description of note" v-model="taskMsg" @input="taskMsge()"
@@ -259,18 +263,21 @@
         <input type="submit" class="btn btn-info text-white" value="Create">
       </form>
     </div>
+    <div class="delete" :class="{ 'trashFold': trashFolders }">
+    </div>
     <div @click="newNote()"
       class="fixedP btn bg-warning w-[50px] h-[50px] border-0 text-[50px] fixed bottom-[60px] right-[30px] z-10 text-white font-normal rounded-[50%]">
       <span class="mt-[-10px]">+</span>
     </div>
     <div :class="{ 'setAct': setAct }"
-      class="settings p-0 mb-0 m-0 flex flex-col justify-flex start items-start absolute px-[20px] bg-white shadow-none w-[100%]">
-      <div @click="closeSet()" class="btn bg-white text-5xl border-0 text-black m-0 w-0 hover:bg-white focus:outline-0">
+      class="settings p-0 mb-0 m-0 flex flex-col justify-flex start items-start absolute px-[20px] bg-[#f7f7f7] shadow-none w-[100%]">
+      <div @click="closeSet()"
+        class="btn bg-[#f7f7f7] text-5xl border-0 text-black m-0 w-0 hover:bg-[#f7f7f7] focus:outline-0">
         &larr;</div>
       <span class="text-[30px] text-thin text-black mt-[40px] mb-[30px]">Notes</span>
       <div class="cloudService mb-[25px]">
         <span class="uppercase text-gray-400 text-[15px]">cloud Service</span>
-        <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
+        <div class="block1 w-[100%] h-[70px] bg-[#f7f7f7] flex flex-row justify-between items-center">
           <span class="w-[120px] text-black font-bold">Xiaomi Cloud</span>
           <span class="flex flex-row justify-center items-center text-warning text-[14px]">Turn on the sync with the cloud
             <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon" version="1.1"
@@ -278,7 +285,7 @@
               <path d="M256 120.768L306.432 64 768 512l-461.568 448L256 903.232 659.072 512z" fill="#000000" />
             </svg></span>
         </div>
-        <div class="block1 border-b-[1px] w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
+        <div class="block1 border-b-[1px] w-[100%] h-[70px] bg-[#f7f7f7] flex flex-row justify-between items-center">
           <span class="text-black font-bold">Deleted notes in the cloud</span>
           <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon" version="1.1"
             xmlns="http://www.w3.org/2000/svg">
@@ -288,20 +295,20 @@
       </div>
       <div class="style w-[100%] mb-[25px]">
         <span class="uppercase text-gray-400 text-[15px]">STYLE</span>
-        <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
+        <div class="block1 w-[100%] h-[70px] bg-[#f7f7f7] flex flex-row justify-between items-center">
           <span class="w-[120px] text-black font-bold">Font size</span>
-          <span class="flex flex-row justify-center items-center bg-white text-[14px]">
-            <select class="select bg-white border-0 shadow-none text-black focus:outline-0">
+          <span class="flex flex-row justify-center items-center bg-[#f7f7f7] text-[14px]">
+            <select class="select bg-[#f7f7f7] border-0 shadow-none text-black focus:outline-0">
               <option selected>Medium</option>
               <option>Small</option>
               <option>Large</option>
             </select>
           </span>
         </div>
-        <div class="block1 border-b-[1px] w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
+        <div class="block1 border-b-[1px] w-[100%] h-[70px] bg-[#f7f7f7] flex flex-row justify-between items-center">
           <span class="w-[120px] text-black font-bold">Sort</span>
-          <span class="flex flex-row justify-center items-center bg-white text-[14px]">
-            <select class="select bg-white border-0 shadow-none text-black focus:outline-0">
+          <span class="flex flex-row justify-center items-center bg-[#f7f7f7] text-[14px]">
+            <select class="select bg-[#f7f7f7] border-0 shadow-none text-black focus:outline-0">
               <option selected>By modification date</option>
               <option></option>
             </select>
@@ -311,9 +318,9 @@
       </div>
       <div class="quick w-[100%] mb-[25px]">
         <span class="uppercase text-gray-400 text-[15px]">Quick features</span>
-        <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center border-b-[1px]">
+        <div class="block1 w-[100%] h-[70px] bg-[#f7f7f7] flex flex-row justify-between items-center border-b-[1px]">
           <span class="w-[120px] text-black font-bold">Quick notes</span>
-          <span class="flex flex-row justify-center items-center bg-white text-[14px]">
+          <span class="flex flex-row justify-center items-center bg-[#f7f7f7] text-[14px]">
             <svg width="15px" height="15px" viewBox="0 0 1024 1024" class="icon" version="1.1"
               xmlns="http://www.w3.org/2000/svg">
               <path d="M256 120.768L306.432 64 768 512l-461.568 448L256 903.232 659.072 512z" fill="#000000" />
@@ -324,10 +331,10 @@
       </div>
       <div class="w-[100%]">
         <span class="uppercase text-gray-400 text-[15px]">Reminders</span>
-        <div class="block1 w-[100%] h-[70px] bg-white flex flex-row justify-between items-center">
+        <div class="block1 w-[100%] h-[70px] bg-[#f7f7f7] flex flex-row justify-between items-center">
           <div class="left p-0">
             <span class="w-[120px] text-black font-bold ">High-priority reminders</span>
-            <span class="flex flex-row justify-center items-center bg-white text-[14px]">
+            <span class="flex flex-row justify-center items-center bg-[#f7f7f7] text-[14px]">
               Play sound even when Silent or DND mode is on
             </span>
           </div>
@@ -361,19 +368,24 @@ export default {
       completed: store.state.completed,
       nameFolder: '',
       realFolderId: '1',
+      FOLds: [],
       newNoteForm: {},
       setAct: false,
+      currentFold: 0,
+      Nots: [],
       current: true,
       selected: false,
       creF: false,
       month: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
       dateOfNote: '',
+      trashFolders: false,
       createNote: false,
       taskDate: '',
       taskMsg: '',
       taskTime: '',
       taskName: '',
       newFold: false,
+      deleteFold: [],
       searc: '',
       allTasks: [],
       presentArr: [],
@@ -414,12 +426,18 @@ export default {
     },
     createF() {
       let newF = {
-        id: this.folders.length + 2,
+        id: this.folders.length + 1,
         title: this.nameFolder,
         todos: [],
       }
+      window.localStorage.folder = JSON.stringify(newF)
+      window.localStorage.folders = JSON.stringify(this.folders)
+      this.FOLds = JSON.parse(window.localStorage.folders)
+      this.FOLds.push(JSON.parse(window.localStorage.folder))
+      window.localStorage.allFolds = JSON.stringify(this.FOLds)
       store.dispatch('ADD_NEW_FOLDER', newF)
       this.creF = !this.creF
+      this.folders = JSON.parse(window.localStorage.allFolds)
     },
     closeFold() {
       this.newFold = !this.newFold
@@ -432,17 +450,36 @@ export default {
       store.dispatch('DONE_MUTATION', task)
       console.log(this.completed);
     },
+    deleteFolder() {
+      let checks = document.querySelectorAll('.checkbox')
+      for (let i of checks) {
+        if (i.checked == true) {
+          for (let o of this.FOLds) {
+            if (i.parentElement.children[1].innerHTML == o.title) {
+              this.FOLds.splice(this.FOLds.indexOf(o), 1)
+            }
+          }
+        } else if (i.checked == false) {
+          this.trashFolders = !this.trashFolders
+        }
+      }
+    },
     category() {
       let wrapper = document.querySelector('.categories')
       for (let i of wrapper.childNodes) {
         i.onclick = (e) => {
+          this.allTasks = JSON.parse(window.localStorage.allNotes)
           for (let o of this.folders) {
-            if (e.target.innerHTML == o.title) {
-              this.allTasks = this.all.filter(item => item.folder == o.id)
+            if (e.target.innerHTML == 'All') {
+              this.allTasks = JSON.parse(window.localStorage.allNotes)
+              this.realFolderId = 0
+            }
+            else if (e.target.innerHTML == o.title) {
+              this.allTasks = JSON.parse(window.localStorage.allNotes).filter(item => item.folder == o.id)
               this.realFolderId = o.id
             }
-            else if (e.target.innerHTML == 'All') {
-              this.allTasks = this.all
+            if (e.target.innerHTML == 'Uncategorized') {
+              this.allTasks = JSON.parse(window.localStorage.allNotes).filter(item => item.folder == 0)
               this.realFolderId = 0
             }
           }
@@ -497,12 +534,19 @@ export default {
       this.newNoteForm = note
     },
     createNewNote() {
+      window.localStorage.note = JSON.stringify(this.newNoteForm)
+      window.localStorage.notes = JSON.stringify(this.allTasks)
+      this.Nots = JSON.parse(window.localStorage.notes)
+      this.Nots.push(JSON.parse(window.localStorage.note))
+      window.localStorage.allNotes = JSON.stringify(this.Nots)
+      this.allTasks = JSON.parse(window.localStorage.allNotes)
       store.dispatch('ADD_NEW_NOTE', this.newNoteForm)
       this.createNote = !this.createNote
     },
   },
   created() {
-    this.allTasks = this.all
+    this.allTasks = JSON.parse(window.localStorage.allNotes)
+    this.folders = JSON.parse(window.localStorage.allFolds)
   },
 
 };
@@ -538,6 +582,10 @@ header {
   bottom: 0 !important;
 }
 
+.trashFold {
+  left: 0 !important;
+}
+
 .creF {
   padding: 15px;
   width: 100%;
@@ -568,15 +616,29 @@ header {
   left: 0 !important;
 }
 
+.delete {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: white;
+  top: 0;
+  left: -100%;
+}
+
 .newTask {
   width: 100%;
   height: 90%;
   position: absolute;
-  bottom: 0;
+  bottom: -100%;
   z-index: 124124;
   padding: 30px;
+  transition: .3s ease-in-out;
   left: 0;
   background: rgb(231, 231, 231);
+}
+
+.actNewTask {
+  bottom: 0% !important;
 }
 
 .swiper {
@@ -589,6 +651,13 @@ header {
 .swiper-wrapper {
   width: 100%;
   position: relative;
+}
+
+@media (max-width: 768px) {
+  .swiper-slide {
+    padding: 0.5rem;
+  }
+
 }
 
 .red {
@@ -615,20 +684,21 @@ header {
   overflow-wrap: normal;
   width: 100%;
 }
+
 @media screen and (max-width: 355px) {
-  #app{
+  #app {
     width: 355px;
   }
-  body , html{
+
+  body,
+  html {
     width: 355px;
   }
 }
+
 @media screen and (min-width: 355px) {
-  html{
+  html {
     width: 100%;
   }
-  .swiper{
-    width: 100%;
-  }
-} 
+}
 </style>
