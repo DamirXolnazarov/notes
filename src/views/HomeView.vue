@@ -72,9 +72,6 @@
             <div
               class="btn capitalize mr-[10px] bg-[#ffff] text-black font-semibold text-[13px] border-none hover:bg-[#eeeeee]">
               All</div>
-            <div
-              class="category btn capitalize bg-[#ffff] text-black font-semibold text-[13px] border-none hover:bg-[#eeeeee] text-gray-400"
-            >Uncategorized</div>
             <div v-for="i of this.folders" :key="i.id"
               class="folders mx-[5px] btn capitalize bg-[#ffff] text-black font-semibold text-[13px] border-none hover:bg-[#eeeeee] text-gray-400">
               {{ i.title }}</div>
@@ -120,7 +117,7 @@
 
     </swiper-slide>
     <swiper-slide class="sw px-[10px] h-[100%]">
-      <div class="uncompleted my-[10px]" v-for="i of this.all" :key="i.id">
+      <div class="uncompleted my-[10px]" v-for="i of this.allTasks" :key="i.id">
         <div class="task rounded-[10px] bg-white py-[10px] w-[100%] flex flex-row justify-start items-center">
           <div class="check w-[50px] flex flex-row justify-center items-center">
             <svg width="22" @click="done(i)" class="cursor-pointer" height="22" viewBox="0 0 22 22" fill="none"
@@ -165,11 +162,11 @@
           <svg width="15px" class="mr-[5px]" height="15px" viewBox="0 0 24 24" fill="none"
             xmlns="http://www.w3.org/2000/svg">
             <path d="M6 9L12 15L18 9" stroke="gray" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-          </svg> Completed {{ this.completed.length }}
+          </svg> Completed {{ this.complete.length }}
         </span>
       </div>
       <div class="completed">
-        <div v-for="i of this.completed" :key="i.id"
+        <div v-for="i of this.allDeleted" :key="i.id"
           class="rounded-[10px] opacity-50 h-[65px] bg-white py-[10px] w-[100%] flex flex-row justify-start items-center">
           <div class="check w-[50px] flex flex-row justify-center items-center">
             <svg width="22" height="21" viewBox="0 0 22 21" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -370,9 +367,13 @@ export default {
       realFolderId: '1',
       FOLds: [],
       newNoteForm: {},
+      complete: [],
       setAct: false,
+      // allDeleted: JSON.parse(window.localStorage.deleted),
+      alldeleted: [],
       currentFold: 0,
       Nots: [],
+      allComplete: [],
       current: true,
       selected: false,
       creF: false,
@@ -448,7 +449,9 @@ export default {
     },
     done(task) {
       store.dispatch('DONE_MUTATION', task)
-      console.log(this.completed);
+      this.allComplete = JSON.parse(window.localStorage.completed)
+      this.allTasks.splice(this.allTasks.indexOf(task), 1)
+      window.localStorage.allNotes = JSON.stringify(this.allTasks)
     },
     deleteFolder() {
       let checks = document.querySelectorAll('.checkbox')
@@ -457,6 +460,8 @@ export default {
           for (let o of this.FOLds) {
             if (i.parentElement.children[1].innerHTML == o.title) {
               this.FOLds.splice(this.FOLds.indexOf(o), 1)
+              this.deleted.push(o)
+              // window.localStorage.deleted = JSON.stringify.apply(this.deleted)
             }
           }
         } else if (i.checked == false) {
@@ -477,10 +482,6 @@ export default {
             else if (e.target.innerHTML == o.title) {
               this.allTasks = JSON.parse(window.localStorage.allNotes).filter(item => item.folder == o.id)
               this.realFolderId = o.id
-            }
-            if (e.target.innerHTML == 'Uncategorized') {
-              this.allTasks = JSON.parse(window.localStorage.allNotes).filter(item => item.folder == 0)
-              this.realFolderId = 0
             }
           }
         }
@@ -526,7 +527,7 @@ export default {
       }
       let note = {
         title: this.taskName,
-        id: 1285612,
+        id: Math.round(Math.random() * 100),
         folder: this.realFolderId,
         date: datee.innerHTML,
         body: this.taskMsg
@@ -547,6 +548,9 @@ export default {
   created() {
     this.allTasks = JSON.parse(window.localStorage.allNotes)
     this.folders = JSON.parse(window.localStorage.allFolds)
+    // this.complete = JSON.parse(window.localStorage.completed)
+    // this.allComplete = JSON.parse(window.localStorage.completed)
+    // this.allDeleted = JSON.parse(window.localStorage.deleted)
   },
 
 };
